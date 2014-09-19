@@ -32,6 +32,7 @@ class XsrMiddleware
       Thread.current['ctx_session_id'] = session_id
 
       if session_id
+        session_id = SaltyHash.hexdigest("#{$$}#{session_id}#{Time.now.to_s}")
         Log4r::MDC.put('session', session_id)
       else
         Log4r::MDC.remove('session')
