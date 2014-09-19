@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name         = 'xsr'
+  s.name         = 'XSR middleware'
   s.version      = '0.0.0'
   s.date         = '2014-09-19'
   s.summary      = 'XSR middleware'
@@ -8,5 +8,5 @@ Gem::Specification.new do |s|
   s.email        = 'dimitri.defrenne@vasco.com'
   s.files        = Dir["{lib}/**/*.rb"]
   s.require_path = 'lib'
-  s.homepage     = ''
+  s.homepage     = 'https://git.vasco.com/dps/xsr_middleware'
 end
