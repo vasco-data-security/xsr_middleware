@@ -13,6 +13,8 @@ class XsrMiddleware
     end
 
     def operator=( given_operator )
+      return unless Module.constants.include? :MdpBackoffice
+
       given_operator = default_operator if given_operator.nil?
 
       Thread.current['ctx_operator'] = given_operator

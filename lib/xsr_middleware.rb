@@ -22,7 +22,7 @@ class XsrMiddleware
     end
 
     XsrMiddleware::RequestContext.request_id = XsrMiddleware::RequestContext.generate_token
-    XsrMiddleware::RequestContext.set_default_operator
+    XsrMiddleware::RequestContext.set_default_operator if Module.constants.include? :MdpBackoffice
 
     Rails.logger.info("Request #{request.method.to_s.upcase} #{request.path} from #{request.remote_ip}")
 
