@@ -28,19 +28,29 @@ class XsrMiddleware
       Thread.current['ctx_operator']
     end
 
-    def session_id=( session_id )
-      Thread.current['ctx_session_id'] = session_id
-
-      if session_id
-        session_id = SaltyHash.hexdigest("#{$$}#{session_id}#{Time.now.to_s}")
-        Log4r::MDC.put('session', session_id)
+    def set_tracking_id(session_id, options = {})
+      Rails.logger.debug "\n=====================\nsession id: #{session_id}, options: #{options.inspect}\n====================="
+      if session_id.nil?
+        Log4r::MDC.remove('tracking')
+        Thread.current['ctx_tracking_id'] = session_id
       else
-        Log4r::MDC.remove('session')
+        Rails.logger.debug "\n=====================\nsession id: #{session_id}\n====================="
+        Rails.logger.debug "\n=====================\nhashed: #{options[:hashed]}\n====================="
+        tracking_id = if options.fetch(:hashed, false)
+                        session_id
+                      else
+                        SaltyHash.hexdigest("#{$$}#{session_id}#{Time.now.to_s}")
+                      end
+        Rails.logger.debug "\n=====================\ntracking id: #{tracking_id}\n====================="
+
+        Thread.current['ctx_tracking_id'] = tracking_id
+        Rails.logger.debug "\n=====================\nThread: #{Thread.current['ctx_tracking_id']}\n====================="
+        Log4r::MDC.put('tracking', tracking_id)
       end
     end
 
-    def session_id
-      Thread.current['ctx_session_id']
+    def tracking_id
+      Thread.current['ctx_tracking_id']
     end
 
     def request_id=( request_id )
@@ -68,8 +78,8 @@ class XsrMiddleware
     def reset
       self.operator   = nil
       self.request_id = nil
-      self.session_id = nil
       self.controller = nil
+      self.set_tracking_id(nil)
     end
 
     def self.method_missing(method,*args,&block)
