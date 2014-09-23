@@ -49,6 +49,12 @@ class XsrMiddleware
       end
     end
 
+    def reset_tracking_id!
+      Rails.logger.debug "\n=====================\ninside reset_tracking_id!\n====================="
+      self.set_tracking_id(nil)
+      Rails.logger.debug "\n=====================\nTracking id: #{self.tracking_id}\n====================="
+    end
+
     def tracking_id
       Thread.current['ctx_tracking_id']
     end
