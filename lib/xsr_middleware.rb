@@ -12,6 +12,9 @@ class XsrMiddleware
     if request.cookies['_dpplus_xsr_id']
       Rails.logger.debug "\n=====================\nhas cookie! mmm cookies\n====================="
       XsrMiddleware::RequestContext.set_tracking_id(request.cookies['_dpplus_xsr_id'], hashed: true)
+    elsif request.headers['X-TrackingId']
+      Rails.logger.debug "\n=====================\nhas X-TrackingId\n====================="
+      XsrMiddleware::RequestContext.set_tracking_id(request.headers['X-TrackingId'], hashed: true)
     else
       Rails.logger.debug "\n=====================\nno has cookie or header!\n====================="
       Rails.logger.debug "\n=====================\nsession options: #{request.session_options.inspect}\n====================="
@@ -28,7 +31,9 @@ class XsrMiddleware
     Rails.logger.debug "\n=====================\nXSR tracking_id: #{XsrMiddleware::RequestContext.tracking_id}\n====================="
 
     headers['X-RequestId']  = XsrMiddleware::RequestContext.request_id
+    headers['X-TrackingId'] = XsrMiddleware::RequestContext.tracking_id
     Rails.logger.debug "\n=====================\nheader: #{headers['X-RequestId']}\n====================="
+    Rails.logger.debug "\n=====================\nheader: #{headers['X-TrackingId']}\n====================="
 
     if XsrMiddleware::RequestContext.tracking_id
       Rack::Utils.set_cookie_header!(headers, "_dpplus_xsr_id", { value: XsrMiddleware::RequestContext.tracking_id,
