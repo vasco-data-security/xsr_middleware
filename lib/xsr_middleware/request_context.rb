@@ -1,3 +1,5 @@
+require 'singleton'
+
 class XsrMiddleware
   class RequestContext
     include Singleton
