@@ -35,7 +35,7 @@ class XsrMiddleware
     def set_tracking_id(session_id, options = {})
       Rails.logger.debug "\n=====================\nsession id: #{session_id}, options: #{options.inspect}\n====================="
       if session_id.nil?
-        Log4r::MDC.remove('tracking')
+        ::Log4r::MDC.remove('tracking')
         Thread.current['ctx_tracking_id'] = session_id
       else
         Rails.logger.debug "\n=====================\nsession id: #{session_id}\n====================="
@@ -49,7 +49,7 @@ class XsrMiddleware
 
         Thread.current['ctx_tracking_id'] = tracking_id
         Rails.logger.debug "\n=====================\nThread: #{Thread.current['ctx_tracking_id']}\n====================="
-        Log4r::MDC.put('tracking', tracking_id)
+        ::Log4r::MDC.put('tracking', tracking_id)
       end
     end
 
@@ -67,9 +67,9 @@ class XsrMiddleware
       Thread.current['ctx_request_id'] = request_id
 
       if request_id
-        Log4r::MDC.put('request', request_id)
+        ::Log4r::MDC.put('request', request_id)
       else
-        Log4r::MDC.remove('request')
+        ::Log4r::MDC.remove('request')
       end
     end
 

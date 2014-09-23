@@ -9,4 +9,10 @@ Gem::Specification.new do |s|
   s.files        = Dir["{lib}/**/*.rb"]
   s.require_path = 'lib'
   s.homepage     = 'https://git.vasco.com/dps/xsr_middleware'
+
+  s.add_runtime_dependency "log4r", "1.1.10"
+
+  s.add_development_dependency "pry"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "rack-test"
 end
