@@ -33,6 +33,8 @@ class XsrMiddleware
     if XsrMiddleware::RequestContext.tracking_id
       Rack::Utils.set_cookie_header!(headers, "_dpplus_xsr_id", { value: XsrMiddleware::RequestContext.tracking_id,
                                                                   path: '/' })
+    else
+      Rack::Utils.delete_cookie_header!(headers, "_dpplus_xsr_id", { path: '/' })
     end
 
     Rails.logger.info("Response #{status} #{headers['Content-Type']} #{headers['Content-Length']}")
