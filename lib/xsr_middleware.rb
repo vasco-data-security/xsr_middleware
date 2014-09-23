@@ -9,7 +9,15 @@ class XsrMiddleware
   def call(env)
     request = ActionDispatch::Request.new(env)
 
-    XsrMiddleware::RequestContext.session_id = request.session_options[:id]
+    if request.cookies['_dpplus_xsr_id']
+      Rails.logger.debug "\n=====================\nhas cookie! mmm cookies\n====================="
+      XsrMiddleware::RequestContext.set_tracking_id(request.cookies['_dpplus_xsr_id'], hashed: true)
+    else
+      Rails.logger.debug "\n=====================\nno has cookie or header!\n====================="
+      Rails.logger.debug "\n=====================\nsession options: #{request.session_options.inspect}\n====================="
+      XsrMiddleware::RequestContext.set_tracking_id(request.session_options[:id], hashed: false)
+    end
+
     XsrMiddleware::RequestContext.request_id = SaltyHash.hexdigest("#{$$}#{request.path}#{Time.now.to_s}")
     XsrMiddleware::RequestContext.set_default_operator
 
@@ -17,7 +25,15 @@ class XsrMiddleware
 
     status, headers, body = @app.call(env)
 
-    headers['X-RequestId'] = XsrMiddleware::RequestContext.request_id
+    Rails.logger.debug "\n=====================\nXSR tracking_id: #{XsrMiddleware::RequestContext.tracking_id}\n====================="
+
+    headers['X-RequestId']  = XsrMiddleware::RequestContext.request_id
+    Rails.logger.debug "\n=====================\nheader: #{headers['X-RequestId']}\n====================="
+
+    if XsrMiddleware::RequestContext.tracking_id
+      Rack::Utils.set_cookie_header!(headers, "_dpplus_xsr_id", { value: XsrMiddleware::RequestContext.tracking_id,
+                                                                  path: '/' })
+    end
 
     Rails.logger.info("Response #{status} #{headers['Content-Type']} #{headers['Content-Length']}")
 
