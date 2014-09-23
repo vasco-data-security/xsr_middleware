@@ -7,14 +7,14 @@ class XsrMiddleware
   end
 
   def call(env)
-    request = ActionDispatch::Request.new(env)
+    request = Rack::Request.new(env)
 
     if request.cookies['_dpplus_xsr_id']
       Rails.logger.debug "\n=====================\nhas cookie! mmm cookies\n====================="
       XsrMiddleware::RequestContext.set_tracking_id(request.cookies['_dpplus_xsr_id'], hashed: true)
-    elsif request.headers['X-TrackingId']
+    elsif request.env['X-TrackingId']
       Rails.logger.debug "\n=====================\nhas X-TrackingId\n====================="
-      XsrMiddleware::RequestContext.set_tracking_id(request.headers['X-TrackingId'], hashed: true)
+      XsrMiddleware::RequestContext.set_tracking_id(request.env['X-TrackingId'], hashed: true)
     else
       Rails.logger.debug "\n=====================\nno has cookie or header!\n====================="
       Rails.logger.debug "\n=====================\nsession options: #{request.session_options.inspect}\n====================="
@@ -24,7 +24,7 @@ class XsrMiddleware
     XsrMiddleware::RequestContext.request_id = XsrMiddleware::RequestContext.generate_token
     XsrMiddleware::RequestContext.set_default_operator if Module.constants.include? :MdpBackoffice
 
-    Rails.logger.info("Request #{request.method.to_s.upcase} #{request.path} from #{request.remote_ip}")
+    Rails.logger.info("Request #{request.request_method.to_s.upcase} #{request.path} from #{request.ip}")
 
     status, headers, body = @app.call(env)
 
