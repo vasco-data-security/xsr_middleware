@@ -1,0 +1,14 @@
+PATH
+  remote: .
+  specs:
+    xsr_middleware (0.0.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  xsr_middleware!
