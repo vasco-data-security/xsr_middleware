@@ -21,7 +21,7 @@ class XsrMiddleware
       XsrMiddleware::RequestContext.set_tracking_id(request.session_options[:id], hashed: false)
     end
 
-    XsrMiddleware::RequestContext.request_id = SaltyHash.hexdigest("#{$$}#{request.path}#{Time.now.to_s}")
+    XsrMiddleware::RequestContext.request_id = XsrMiddleware::RequestContext.generate_token
     XsrMiddleware::RequestContext.set_default_operator
 
     Rails.logger.info("Request #{request.method.to_s.upcase} #{request.path} from #{request.remote_ip}")

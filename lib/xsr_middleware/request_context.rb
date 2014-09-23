@@ -41,7 +41,7 @@ class XsrMiddleware
         tracking_id = if options.fetch(:hashed, false)
                         session_id
                       else
-                        SaltyHash.hexdigest("#{$$}#{session_id}#{Time.now.to_s}")
+                        generate_token
                       end
         Rails.logger.debug "\n=====================\ntracking id: #{tracking_id}\n====================="
 
@@ -81,6 +81,10 @@ class XsrMiddleware
 
     def controller
       Thread.current['ctx_controller']
+    end
+
+    def generate_token
+      SecureRandom.hex(16)
     end
 
     def reset
