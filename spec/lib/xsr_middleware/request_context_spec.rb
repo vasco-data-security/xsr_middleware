@@ -4,13 +4,6 @@ describe XsrMiddleware::RequestContext do
 
   subject { XsrMiddleware::RequestContext }
 
-  describe "#create_tracking_id" do
-    it "adds a new tracking id to the Thread" do
-      subject.create_tracking_id
-      expect(Thread.current['ctx_tracking_id']).to match /[a-z0-9]{32}/
-    end
-  end
-
   describe "#set_tracking_id" do
     it "adds the tracking id to the Thread" do
       subject.set_tracking_id('123456')

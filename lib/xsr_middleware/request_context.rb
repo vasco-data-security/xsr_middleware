@@ -32,18 +32,9 @@ class XsrMiddleware
       Thread.current['ctx_operator']
     end
 
-    def create_tracking_id
-      set_tracking_id(generate_token)
-    end
-
     def set_tracking_id(tracking_id)
       Thread.current['ctx_tracking_id'] = tracking_id
       ::Log4r::MDC.put('tracking', tracking_id)
-    end
-
-    def reset_tracking_id!
-      Thread.current['ctx_tracking_id'] = nil
-      ::Log4r::MDC.remove('tracking')
     end
 
     def tracking_id
@@ -72,10 +63,6 @@ class XsrMiddleware
       Thread.current['ctx_controller']
     end
 
-    def generate_token
-      SecureRandom.hex(16)
-    end
-
     def reset
       self.operator   = nil
       self.request_id = nil
@@ -86,5 +73,12 @@ class XsrMiddleware
     def self.method_missing(method,*args,&block)
       self.instance.send(method,*args,&block)
     end
+
+    private
+
+      def reset_tracking_id!
+        Thread.current['ctx_tracking_id'] = nil
+        ::Log4r::MDC.remove('tracking')
+      end
   end
 end
