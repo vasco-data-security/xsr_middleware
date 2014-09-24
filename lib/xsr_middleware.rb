@@ -1,6 +1,12 @@
 require 'xsr_middleware/request_context'
 require 'digest'
 
+##
+# This middleware helps with tracking users accross multiple requests and services (anonymously),
+# by using an MD5-encoded session_id as tracking_id.
+#
+# It will also add the tracking_id to a header (X-TrackingId) so the services can use it as well.
+
 class XsrMiddleware
 
   def initialize(app)
@@ -19,8 +25,6 @@ class XsrMiddleware
     XsrMiddleware::RequestContext.request_id = encode_string("#{$$}#{request.path}#{Time.now.to_s}")
     XsrMiddleware::RequestContext.set_default_operator if Module.constants.include? :MdpBackoffice
 
-    # Rails.logger.info("Request #{request.request_method.to_s.upcase} #{request.path} from #{request.ip}")
-
     status, headers, body = @app.call(env)
 
     # TODO : Do not set X-RequestId header
@@ -28,8 +32,6 @@ class XsrMiddleware
     # if this header is not available, a random uuid. header already set by web server.
     headers['X-RequestId']  = XsrMiddleware::RequestContext.request_id
     headers['X-TrackingId'] = XsrMiddleware::RequestContext.tracking_id
-
-    # Rails.logger.info("Response #{status} #{headers['Content-Type']} #{headers['Content-Length']}")
 
     XsrMiddleware::RequestContext.reset
 

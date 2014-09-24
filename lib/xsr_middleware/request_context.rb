@@ -1,9 +1,16 @@
 require 'singleton'
 
 class XsrMiddleware
+
+  ##
+  # The main responsability of the RequestContext class is to take care of the tracking_id
+  # which is being added or removed from the current Thread.
+
   class RequestContext
     include Singleton
 
+    # TODO : This class should not know anything about the operator.
+    # This code belongs to dpplus and mdp_backoffice.
     def set_default_operator
       self.operator = default_operator
     end
@@ -32,6 +39,12 @@ class XsrMiddleware
       Thread.current['ctx_operator']
     end
 
+    ##
+    # Adds the tracking_id to the current Thread
+    # and passes it to the logger.
+    #
+    # - tracking_id = an encoded string
+
     def set_tracking_id(tracking_id)
       Thread.current['ctx_tracking_id'] = tracking_id
       ::Log4r::MDC.put('tracking', tracking_id)
@@ -55,6 +68,8 @@ class XsrMiddleware
       Thread.current['ctx_request_id']
     end
 
+    # TODO : This class should not know anything about the controller.
+    # This code belongs to dpplus and mdp_backoffice.
     def controller=( controller )
       Thread.current['ctx_controller'] = controller
     end
