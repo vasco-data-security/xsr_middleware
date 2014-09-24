@@ -21,6 +21,14 @@ describe XsrMiddleware do
 
       expect(response[1]["X-TrackingId"]).to match /[a-z0-9]{32}/
     end
+
+    context "when there is no session_id" do
+      it "uses an encoded empty string" do
+        response = subject.call({})
+
+        expect(response[1]["X-TrackingId"]).to eql eql(Digest::MD5.new.hexdigest(''))
+      end
+    end
   end
 
   context "when X-TrackingId-header is present" do

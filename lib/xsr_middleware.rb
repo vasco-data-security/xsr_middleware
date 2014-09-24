@@ -13,7 +13,7 @@ class XsrMiddleware
     if request.env['X-TrackingId']
       XsrMiddleware::RequestContext.set_tracking_id(request.env['X-TrackingId'])
     else
-      XsrMiddleware::RequestContext.set_tracking_id(encode_string(request.session_options[:id]))
+      XsrMiddleware::RequestContext.set_tracking_id(encode_string(request.session_options.fetch(:id, '')))
     end
 
     XsrMiddleware::RequestContext.request_id = encode_string("#{$$}#{request.path}#{Time.now.to_s}")
