@@ -10,11 +10,11 @@ class XsrMiddleware
     request = Rack::Request.new(env)
 
     if request.cookies['_dpplus_xsr_id']
-      XsrMiddleware::RequestContext.set_tracking_id(request.cookies['_dpplus_xsr_id'], hashed: true)
+      XsrMiddleware::RequestContext.set_tracking_id(request.cookies['_dpplus_xsr_id'])
     elsif request.env['X-TrackingId']
-      XsrMiddleware::RequestContext.set_tracking_id(request.env['X-TrackingId'], hashed: true)
+      XsrMiddleware::RequestContext.set_tracking_id(request.env['X-TrackingId'])
     else
-      XsrMiddleware::RequestContext.set_tracking_id(request.session_options[:id], hashed: false)
+      XsrMiddleware::RequestContext.create_tracking_id
     end
 
     XsrMiddleware::RequestContext.request_id = XsrMiddleware::RequestContext.generate_token
