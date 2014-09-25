@@ -38,5 +38,21 @@ describe XsrMiddleware do
       expect(response[1]["X-Tracking-Id"]).to eql('57a85d228a17a995a73ab4149c120ef0')
     end
   end
+
+  context "when there is no X-MDP-Request-Id-header" do
+    it "sets the header" do
+      response = subject.call({})
+
+      expect(response[1]["X-MDP-Request-Id"]).to match /[a-z0-9]{32}/
+    end
+  end
+
+  context "when there is a X-MDP-Request-Id-header" do
+    it "reuses the header's value" do
+      response = subject.call(env.merge({ 'X-MDP-Request-Id' => '800eaa6f53e678602fb0266a1b037179' }))
+
+      expect(response[1]["X-MDP-Request-Id"]).to eql('800eaa6f53e678602fb0266a1b037179')
+    end
+  end
 end
 

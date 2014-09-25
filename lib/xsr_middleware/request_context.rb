@@ -54,18 +54,19 @@ class XsrMiddleware
       Thread.current['ctx_tracking_id']
     end
 
-    def request_id=( request_id )
-      Thread.current['ctx_request_id'] = request_id
+    ##
+    # Adds the mdp request id to the current Thread
+    # and passes it to the logger
+    #
+    # - mdp_request_id = an encoded string
 
-      if request_id
-        ::Log4r::MDC.put('request', request_id)
-      else
-        ::Log4r::MDC.remove('request')
-      end
+    def set_mdp_request_id(mdp_request_id)
+      Thread.current['ctx_mdp_request_id'] = mdp_request_id
+      ::Log4r::MDC.put('request', mdp_request_id)
     end
 
-    def request_id
-      Thread.current['ctx_request_id']
+    def mdp_request_id
+      Thread.current['ctx_mdp_request_id']
     end
 
     # TODO : This class should not know anything about the controller.
@@ -80,9 +81,9 @@ class XsrMiddleware
 
     def reset
       self.operator   = nil
-      self.request_id = nil
       self.controller = nil
       reset_tracking_id!
+      reset_mdp_request_id!
     end
 
     def self.method_missing(method,*args,&block)
@@ -94,6 +95,11 @@ class XsrMiddleware
       def reset_tracking_id!
         Thread.current['ctx_tracking_id'] = nil
         ::Log4r::MDC.remove('tracking')
+      end
+
+      def reset_mdp_request_id!
+        Thread.current['ctx_mdp_request_id'] = nil
+        ::Log4r::MDC.remove('request')
       end
   end
 end
