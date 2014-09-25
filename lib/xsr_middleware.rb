@@ -19,7 +19,8 @@ class XsrMiddleware
     if request.env['X-Tracking-Id']
       XsrMiddleware::RequestContext.set_tracking_id(request.env['X-Tracking-Id'])
     else
-      XsrMiddleware::RequestContext.set_tracking_id(encode_string(request.session_options.fetch(:id, '')))
+      session_id = request.session_options[:id] || ''
+      XsrMiddleware::RequestContext.set_tracking_id(encode_string(session_id))
     end
 
     if request.env['X-MDP-Request-Id']
