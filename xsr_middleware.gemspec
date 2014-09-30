@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name         = 'xsr_middleware'
+  s.name         = 'xsr'
   s.version      = '1.0.3'
   s.date         = '2014-09-26'
   s.summary      = 'XSR middleware'
