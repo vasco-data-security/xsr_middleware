@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe XsrMiddleware do
+describe Xsr do
 
   let(:app) { ->(env){ [200, {}, ['OK']] } }
   let(:env) {{
     'rack.session.options' => { id: '12345' }
   }}
 
-  subject { XsrMiddleware.new(app) }
+  subject { Xsr::Middleware.new(app) }
 
   context "when there is no X-Mdp-Tracking-Id-header" do
     it "uses the session_id to generate a tracking_id" do
