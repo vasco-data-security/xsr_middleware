@@ -1,4 +1,4 @@
-require 'xsr_middleware/request_context'
+require 'xsr/request_context'
 require 'digest'
 
 ##
