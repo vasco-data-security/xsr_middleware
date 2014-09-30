@@ -9,36 +9,6 @@ module Xsr
   class RequestContext
     include Singleton
 
-    # TODO : This class should not know anything about the operator.
-    # This code belongs to dpplus and mdp_backoffice.
-    def set_default_operator
-      self.operator = default_operator
-    end
-
-    def default_operator
-      @@vasco_operator ||= MdpBackoffice::Operator.find_by_login('vasco_federation_portal')
-    end
-
-    def operator=( given_operator )
-      return unless Module.constants.include? :MdpBackoffice
-
-      given_operator = default_operator if given_operator.nil?
-
-      Thread.current['ctx_operator'] = given_operator
-
-      EnAble::Stamped.current_stamper = given_operator && given_operator.id
-
-      if given_operator
-        Log4r::MDC.put('operator',given_operator.login)
-      else
-        Log4r::MDC.remove('operator')
-      end
-    end
-
-    def operator
-      Thread.current['ctx_operator']
-    end
-
     ##
     # Adds the tracking_id to the current Thread
     # and passes it to the logger.
@@ -80,7 +50,7 @@ module Xsr
     end
 
     def reset
-      self.operator   = nil
+      self.operator   = nil if Xsr::RequestContext.method_defined? :operator=
       self.controller = nil
       reset_tracking_id!
       reset_mdp_request_id!
