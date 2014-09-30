@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name         = 'xsr'
-  s.version      = '1.0.3'
-  s.date         = '2014-09-26'
+  s.version      = '1.1.0'
+  s.date         = '2014-09-30'
   s.summary      = 'XSR middleware'
   s.description  = "A middleware used to follow a user's path (anonymously) across different services."
   s.authors      = ['Dimitri De Frenne', 'Kjel Delaey']
