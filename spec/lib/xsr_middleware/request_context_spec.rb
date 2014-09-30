@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe XsrMiddleware::RequestContext do
+describe Xsr::RequestContext do
 
-  subject { XsrMiddleware::RequestContext }
+  subject { Xsr::RequestContext }
 
   describe "#set_tracking_id" do
     it "adds the tracking id to the Thread" do

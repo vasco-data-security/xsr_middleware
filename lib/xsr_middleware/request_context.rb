@@ -1,6 +1,6 @@
 require 'singleton'
 
-class XsrMiddleware
+module Xsr
 
   ##
   # The main responsability of the RequestContext class is to take care of the tracking_id
