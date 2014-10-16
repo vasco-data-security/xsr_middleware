@@ -1,0 +1,10 @@
+Thu, 16 Oct 2014 11:50:18 +0200
+./Gemfile	Thu, 16 Oct 2014 11:48:36 +0200
+./Gemfile.lock	Thu, 16 Oct 2014 11:49:48 +0200
+./lib/xsr/request_context.rb	Tue, 30 Sep 2014 15:16:52 +0200
+./lib/xsr.rb	Tue, 30 Sep 2014 15:16:52 +0200
+./README.md	Thu, 16 Oct 2014 11:46:12 +0200
+./spec/lib/xsr/request_context_spec.rb	Tue, 30 Sep 2014 15:16:52 +0200
+./spec/lib/xsr_spec.rb	Tue, 30 Sep 2014 15:16:52 +0200
+./spec/spec_helper.rb	Tue, 30 Sep 2014 15:16:52 +0200
+./xsr_middleware.gemspec	Tue, 30 Sep 2014 15:16:52 +0200

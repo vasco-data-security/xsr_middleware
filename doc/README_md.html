@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>README - RDoc Documentation</title>
+
+<link href="./fonts.css" rel="stylesheet">
+<link href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/navigation.js"></script>
+<script src="./js/search_index.js"></script>
+<script src="./js/search.js"></script>
+<script src="./js/searcher.js"></script>
+<script src="./js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+<div class="nav-section">
+  <h3>Table of Contents</h3>
+
+  <ul class="link-list" role="directory">
+    <li><a href="#label-Cross+Service+Request+Middleware">Cross Service Request Middleware</a>
+    <li><a href="#label-Description">Description</a>
+    <li><a href="#label-Installation">Installation</a>
+    <li><a href="#label-Installing+the+gem">Installing the gem</a>
+    <li><a href="#label-Adding+the+Middleware">Adding the Middleware</a>
+    <li><a href="#label-When+using+mdp_rest_client">When using mdp_rest_client</a>
+    <li><a href="#label-When+using+HTTPClient">When using HTTPClient</a>
+    <li><a href="#label-Log4r-integration">Log4r-integration</a>
+  </ul>
+</div>
+
+
+  <div id="project-metadata">
+    <div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Gemfile.html">Gemfile</a>
+  
+    <li><a href="./Gemfile_lock.html">Gemfile.lock</a>
+  
+    <li><a href="./README_md.html">README</a>
+  
+    <li><a href="./xsr_middleware_gemspec.html">xsr_middleware.gemspec</a>
+  
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-label="Page README.md">
+
+<h1 id="label-Cross+Service+Request+Middleware">Cross Service Request Middleware<span><a href="#label-Cross+Service+Request+Middleware">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+
+<h2 id="label-Description">Description<span><a href="#label-Description">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p>A middleware used to follow a user&#39;s path (anonymously) across
+different services.</p>
+
+<h2 id="label-Installation">Installation<span><a href="#label-Installation">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<h3 id="label-Installing+the+gem">Installing the gem<span><a href="#label-Installing+the+gem">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<pre># Gemfile
+
+source &quot;http://rubygems.org&quot;
+
+gem &#39;xsr&#39;, git: &quot;ssh://git@git.vasco.com/dps/xsr_middleware.git&quot;</pre>
+
+<h3 id="label-Adding+the+Middleware">Adding the Middleware<span><a href="#label-Adding+the+Middleware">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>You can add the <a href="Xsr.html">Xsr</a> middleware to the middleware
+stack using any of the following methods:</p>
+<ul><li>
+<pre>Xsr::Middleware</pre>
+
+<p>: Adds the <a href="Xsr.html">Xsr</a> middleware at the bottom of the
+middleware stack.</p>
+</li><li>
+<pre>existing_middleware, Xsr::Middleware</pre>
+
+<p>: Adds the <a href="Xsr.html">Xsr</a> middleware before the specified
+existing middleware in the middleware stack.</p>
+</li><li>
+<pre>existing_middleware, Xsr::Middleware</pre>
+
+<p>: Adds the <a href="Xsr.html">Xsr</a> middleware after the specified
+existing middleware in the middleware stack.</p>
+</li></ul>
+
+<pre class="ruby"><span class="ruby-comment"># config/application.rb</span>
+
+<span class="ruby-identifier">config</span>.<span class="ruby-identifier">middleware</span>.<span class="ruby-identifier">use</span> <span class="ruby-constant">Xsr</span><span class="ruby-operator">::</span><span class="ruby-constant">Middleware</span>
+</pre>
+
+<h3 id="label-When+using+mdp_rest_client">When using mdp_rest_client<span><a href="#label-When+using+mdp_rest_client">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>Add the <a href="Xsr.html">Xsr</a> middleware to the middleware stack as
+described in the <em>Adding the Middleware</em> section and configure the
+rest client.</p>
+
+<pre class="ruby"><span class="ruby-comment"># config/initializers/rest_client.rb</span>
+
+<span class="ruby-identifier">config</span>.<span class="ruby-identifier">request_context</span> = <span class="ruby-constant">Xsr</span><span class="ruby-operator">::</span><span class="ruby-constant">RequestContext</span>.<span class="ruby-identifier">instance</span>
+</pre>
+
+<p>It will set the <code>X-Mdp-Request-Id</code> and
+<code>X-Mpd-Tracking-Id</code> headers automatically.</p>
+
+<h3 id="label-When+using+HTTPClient">When using HTTPClient<span><a href="#label-When+using+HTTPClient">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>When using HTTPClient, or using the <code>curl</code> command you&#39;ll
+need to pass the headers by yourself so that the application you are
+communicating with can use the values from the existing headers instead of
+generating new IDs upon each request. As a result the response headers will
+contain the same values too.</p>
+
+<pre class="ruby"><span class="ruby-comment"># lib/foo.rb</span>
+
+<span class="ruby-identifier">require</span> <span class="ruby-string">&#39;httpclient&#39;</span>
+<span class="ruby-identifier">require</span> <span class="ruby-string">&#39;httpclient/include_client&#39;</span>
+
+<span class="ruby-keyword">class</span> <span class="ruby-constant">Foo</span>
+  <span class="ruby-identifier">extend</span> <span class="ruby-constant">HTTPClient</span><span class="ruby-operator">::</span><span class="ruby-constant">IncludeClient</span>
+
+  <span class="ruby-identifier">include_http_client</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">bar</span>
+    <span class="ruby-identifier">res</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">http_client</span>.<span class="ruby-identifier">post</span>( <span class="ruby-identifier">uri</span>,
+                                { <span class="ruby-identifier">api_key</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span> },
+                                { <span class="ruby-string">&#39;X-Mdp-Request-Id&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Xsr</span><span class="ruby-operator">::</span><span class="ruby-constant">RequestContext</span>.<span class="ruby-identifier">mdp_request_id</span>,
+                                  <span class="ruby-string">&#39;X-Mdp-Tracking-Id&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Xsr</span><span class="ruby-operator">::</span><span class="ruby-constant">RequestContext</span>.<span class="ruby-identifier">tracking_idli</span> } )
+
+    <span class="ruby-identifier">p</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">header</span>[<span class="ruby-string">&#39;X-Mdp-Request-Id&#39;</span>]
+    <span class="ruby-identifier">p</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">header</span>[<span class="ruby-string">&#39;X-Mdp-Tracking-Id&#39;</span>]
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<h2 id="label-Log4r-integration">Log4r-integration<span><a href="#label-Log4r-integration">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p>XSR Middleware adds a few keys to Log4r for easy logging: -
+<code>request</code>: MDP Request ID - <code>tracking</code>: MDP Tracking
+ID - <code>operator</code>: Operator (only usable in MDP and MDP
+Backoffice)</p>
+
+<p>These can be used in the PatternFormatter of Log4r.</p>
+
+<pre># config/settings/production.yml
+
+log_to: log4r_config
+log4r_config:
+  loggers:
+    - name: production
+      outputters:
+        - syslog
+
+  outputters:
+    - type: SyslogOutputter
+      name: syslog
+      level: INFO
+      ident: _app_production_name_of_the_service
+      facility: LOG_USER
+      formatter:
+        pattern: &#39;%5l [%p:%X{request}:%X{session}:%X{operator}] %m&#39;
+        type: PatternFormatter</pre>
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
