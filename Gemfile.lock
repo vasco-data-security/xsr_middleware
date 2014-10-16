@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    xsr_middleware (1.0.2)
+    xsr (1.1.0)
       log4r (= 1.1.10)
 
 GEM
@@ -39,4 +39,4 @@ DEPENDENCIES
   pry
   rack-test
   rspec
-  xsr_middleware!
+  xsr!
