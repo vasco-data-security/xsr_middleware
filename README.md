@@ -90,6 +90,6 @@ log4r_config:
       ident: _app_production_name_of_the_service
       facility: LOG_USER
       formatter:
-        pattern: '%5l [%p:%X{request}:%X{session}:%X{operator}] %m'
+        pattern: '%5l [%p:%X{request}:%X{tracking}:%X{operator}] %m'
         type: PatternFormatter
 ```
