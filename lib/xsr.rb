@@ -1,5 +1,7 @@
 require 'xsr/request_context'
 require 'digest'
+require 'logger'
+require 'singleton'
 
 ##
 # This middleware helps with tracking users accross multiple requests and services (anonymously):
@@ -54,5 +56,40 @@ module Xsr
         Digest::MD5.new.hexdigest(string)
       end
 
+  end
+
+  class Configuration
+    include Singleton
+
+    def self.default_logger
+      logger = Logger.new(STDOUT)
+      logger.define_singleton_method(:tagged) { |request_info, &block| block.call }
+      logger.progname = 'xsr'
+      logger
+    end
+
+    def self.defaults
+      @defaults ||= {
+        logger: default_logger
+      }
+    end
+
+    attr_accessor :logger
+
+    def initialize
+      self.class.defaults.each_pair { |k, v| send("#{k}=", v) }
+    end
+  end
+
+  def self.config
+    Configuration.instance
+  end
+
+  def self.configure
+    yield config
+  end
+
+  def self.logger
+    config.logger
   end
 end

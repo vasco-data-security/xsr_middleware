@@ -27,6 +27,25 @@ You can add the Xsr middleware to the middleware stack using any of the followin
 config.middleware.use Xsr::Middleware
 ```
 
+### Adding the logging functionality
+```ruby
+# config/initializers/xsr.rb
+
+Xsr.config.logger = Rails.logger
+
+# config/initializers/log_formatter.rb
+
+class ActiveSupport::Logger::SimpleFormatter
+  def call(severity, time, progname, msg)
+    if !msg.blank?
+      "#{severity} #{msg}\n"
+    else
+      "\n"
+    end
+  end
+end
+```
+
 ### When using mdp_rest_client
 Add the Xsr middleware to the middleware stack as described in the _Adding the Middleware_ section and configure the rest client.
 
