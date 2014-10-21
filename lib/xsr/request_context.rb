@@ -17,7 +17,7 @@ module Xsr
 
     def set_tracking_id(tracking_id)
       Thread.current['ctx_tracking_id'] = tracking_id
-      ::Log4r::MDC.put('tracking', tracking_id)
+      ::Log4r::MDC.put('tracking', tracking_id) if defined? ::Log4r
     end
 
     def tracking_id
@@ -32,7 +32,7 @@ module Xsr
 
     def set_mdp_request_id(mdp_request_id)
       Thread.current['ctx_mdp_request_id'] = mdp_request_id
-      ::Log4r::MDC.put('request', mdp_request_id)
+      ::Log4r::MDC.put('request', mdp_request_id) if defined? ::Log4r
     end
 
     def mdp_request_id
@@ -64,12 +64,12 @@ module Xsr
 
       def reset_tracking_id!
         Thread.current['ctx_tracking_id'] = nil
-        ::Log4r::MDC.remove('tracking')
+        ::Log4r::MDC.remove('tracking') if defined? ::Log4r
       end
 
       def reset_mdp_request_id!
         Thread.current['ctx_mdp_request_id'] = nil
-        ::Log4r::MDC.remove('request')
+        ::Log4r::MDC.remove('request') if defined? ::Log4r
       end
   end
 end
