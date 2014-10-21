@@ -38,7 +38,7 @@ module Xsr
 
       Xsr::RequestContext.set_default_operator if Module.constants.include? :MdpBackoffice
 
-      status, headers, body = @app.call(env)
+      status, headers, body = Xsr.logger.tagged(request_info) { @app.call(env) }
 
       # See the description at the top of this file.
       # Rack does some annoying magic!
@@ -56,6 +56,9 @@ module Xsr
         Digest::MD5.new.hexdigest(string)
       end
 
+      def request_info
+        "#{$$}:#{Xsr::RequestContext.mdp_request_id}:#{Xsr::RequestContext.tracking_id}"
+      end
   end
 
   class Configuration
