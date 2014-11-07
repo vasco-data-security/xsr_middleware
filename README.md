@@ -35,6 +35,20 @@ Xsr.config.logger = Rails.logger
 
 # config/initializers/log_formatter.rb
 
+## Rails 3.2.x
+
+class Logger::SimpleFormatter
+  def call(severity, time, progname, msg)
+    if !msg.blank?
+      "#{severity} #{msg}\n"
+    else
+      "\n"
+    end
+  end
+end
+```
+## Rails 4.x
+
 class ActiveSupport::Logger::SimpleFormatter
   def call(severity, time, progname, msg)
     if !msg.blank?
