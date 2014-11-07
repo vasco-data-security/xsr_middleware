@@ -46,7 +46,7 @@ class Logger::SimpleFormatter
     end
   end
 end
-```
+
 ## Rails 4.x
 
 class ActiveSupport::Logger::SimpleFormatter
