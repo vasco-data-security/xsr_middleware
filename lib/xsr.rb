@@ -36,7 +36,7 @@ module Xsr
         Xsr::RequestContext.set_mdp_request_id(encode_string("#{$$}#{request.path}#{Time.now.to_s}"))
       end
 
-      Xsr::RequestContext.set_default_operator if Module.constants.include? :MdpBackoffice
+      Xsr::RequestContext.set_default_operator if Xsr::RequestContext.method_defined?(:set_default_operator)
 
       status, headers, body = Xsr.logger.tagged(request_info) { @app.call(env) }
 

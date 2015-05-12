@@ -102,7 +102,7 @@ end
 XSR Middleware adds a few keys to Log4r for easy logging:
 - ```request```: MDP Request ID
 - ```tracking```: MDP Tracking ID
-- ```operator```: Operator (only usable in MDP and MDP Backoffice)
+- ```operator```: Operator (only used in MDP Backoffice)
 
 These can be used in the PatternFormatter of Log4r.
 

@@ -1,10 +1,10 @@
 Gem::Specification.new do |s|
   s.name         = 'xsr'
-  s.version      = '1.2.1'
+  s.version      = '1.2.2'
   s.date         = '2014-10-21'
   s.summary      = 'XSR middleware'
   s.description  = "A middleware used to follow a user's path (anonymously) across different services."
-  s.authors      = ['Dimitri De Frenne', 'Kjel Delaey']
+  s.authors      = ['Dimitri De Frenne', 'Kjel Delaey', 'Toon Nevelsteen', 'Nicky Peeters']
   s.email        = 'dimitri.defrenne@vasco.com'
   s.files        = Dir["{lib}/**/*.rb"]
   s.require_path = 'lib'
