@@ -28,7 +28,7 @@ module Xsr
 
       Xsr::RequestContext.set_default_operator if Xsr::RequestContext.method_defined?(:set_default_operator)
 
-      status, headers, body = Xsr.logger.tagged(request_info) { @app.call(env) }
+      status, headers, body = @app.call(env)
 
       # See the description at the top of this file.
       # Rack does some annoying magic!
@@ -55,7 +55,6 @@ module Xsr
 
     def self.default_logger
       logger = Logger.new(STDOUT)
-      logger.define_singleton_method(:tagged) { |request_info, &block| block.call }
       logger.progname = 'xsr'
       logger
     end
