@@ -19,8 +19,8 @@ module Xsr
     def call(env)
       request = Rack::Request.new(env)
 
-      if request.env['HTTP_X_CORRELATION_ID']
-        Xsr::RequestContext.correlation_id  = request.env['HTTP_X_CORRELATION_ID']
+      if request.env['HTTP_LOG_CORRELATION_ID']
+        Xsr::RequestContext.correlation_id  = request.env['HTTP_LOG_CORRELATION_ID']
       else
         session_id = request.session_options[:id] || ''
         Xsr::RequestContext.correlation_id = encode_string(session_id)

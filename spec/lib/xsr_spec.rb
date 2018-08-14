@@ -33,7 +33,7 @@ describe Xsr do
 
   context "when Log-Correlation-ID-header is present" do
     it "doesn't change its value" do
-      response = subject.call(env.merge({ 'HTTP_X_CORRELATION_ID' => '57a85d228a17a995a73ab4149c120ef0' }))
+      response = subject.call(env.merge({ 'HTTP_LOG_CORRELATION_ID' => '57a85d228a17a995a73ab4149c120ef0' }))
 
       expect(response[1]["Log-Correlation-ID"]).to eql('57a85d228a17a995a73ab4149c120ef0')
     end
