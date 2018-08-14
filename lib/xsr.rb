@@ -4,18 +4,14 @@ require 'logger'
 require 'singleton'
 
 ##
-# This middleware helps with tracking users accross multiple requests and services (anonymously):
-#   - by setting a request id to follow a request to multiple services (X-Mdp-Request-Id)
-#   - by setting a tracking id to follow a user through multiple requests (X-Mdp-Tracking-Id)
+# This middleware helps with tracking users accross multiple services (anonymously)
+# by setting a Correlation id to follow a request to multiple services (Log-Correlation-ID)
 #
 # Be aware that whenever you perform an actual call to a web server,
 # Rack automatically prepends "HTTP_" to the header's key, replaces dashes by
 # underscores and capitalizes word segments.
-
 module Xsr
-
   class Middleware
-
     def initialize(app)
       @app = app
     end
@@ -23,27 +19,20 @@ module Xsr
     def call(env)
       request = Rack::Request.new(env)
 
-      if request.env['HTTP_X_MDP_TRACKING_ID']
-        Xsr::RequestContext.set_tracking_id(request.env['HTTP_X_MDP_TRACKING_ID'])
+      if request.env['HTTP_LOG_CORRELATION_ID']
+        Xsr::RequestContext.correlation_id  = request.env['HTTP_LOG_CORRELATION_ID']
       else
         session_id = request.session_options[:id] || ''
-        Xsr::RequestContext.set_tracking_id(encode_string(session_id))
-      end
-
-      if request.env['HTTP_X_MDP_REQUEST_ID']
-        Xsr::RequestContext.set_mdp_request_id(request.env['HTTP_X_MDP_REQUEST_ID'])
-      else
-        Xsr::RequestContext.set_mdp_request_id(encode_string("#{$$}#{request.path}#{Time.now.to_s}"))
+        Xsr::RequestContext.correlation_id = encode_string(session_id)
       end
 
       Xsr::RequestContext.set_default_operator if Xsr::RequestContext.method_defined?(:set_default_operator)
 
-      status, headers, body = Xsr.logger.tagged(request_info) { @app.call(env) }
+      status, headers, body = @app.call(env)
 
       # See the description at the top of this file.
       # Rack does some annoying magic!
-      headers['X-Mdp-Request-Id'] = Xsr::RequestContext.mdp_request_id
-      headers['X-Mdp-Tracking-Id'] = Xsr::RequestContext.tracking_id
+      headers['Log-Correlation-ID'] = Xsr::RequestContext.correlation_id
 
       Xsr::RequestContext.reset
 
@@ -57,7 +46,7 @@ module Xsr
       end
 
       def request_info
-        "#{$$}:#{Xsr::RequestContext.mdp_request_id}:#{Xsr::RequestContext.tracking_id}"
+        "#{$$}:#{Xsr::RequestContext.correlation_id}"
       end
   end
 
@@ -66,7 +55,6 @@ module Xsr
 
     def self.default_logger
       logger = Logger.new(STDOUT)
-      logger.define_singleton_method(:tagged) { |request_info, &block| block.call }
       logger.progname = 'xsr'
       logger
     end

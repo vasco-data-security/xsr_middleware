@@ -1,14 +1,14 @@
 Gem::Specification.new do |s|
   s.name         = 'xsr'
-  s.version      = '1.2.2'
-  s.date         = '2014-10-21'
+  s.version      = '2.0.0'
+  s.date         = '2018-08-13'
   s.summary      = 'XSR middleware'
   s.description  = "A middleware used to follow a user's path (anonymously) across different services."
-  s.authors      = ['Dimitri De Frenne', 'Kjel Delaey', 'Toon Nevelsteen', 'Nicky Peeters']
-  s.email        = 'dimitri.defrenne@vasco.com'
+  s.authors      = ['Maxime Robert-Schreyers', 'Toon Nevelsteen']
+  s.email        = 'nevelto1@onespan.com'
   s.files        = Dir["{lib}/**/*.rb"]
   s.require_path = 'lib'
-  s.homepage     = 'https://git.vasco.com/dps/xsr_middleware'
+  s.homepage     = 'https://git.onespan.com/dps/xsr_middleware'
 
   s.add_runtime_dependency "log4r", "1.1.10"
 
